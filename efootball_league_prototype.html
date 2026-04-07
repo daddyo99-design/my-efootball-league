@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>eFootball League</title>
+  <style>
+    body { font-family: Arial, sans-serif; margin: 20px; background: #f5f5f5; }
+    h1, h2 { text-align: center; }
+    .match-day { background: #ffd700; padding: 10px; margin-bottom: 20px; border-radius: 8px; }
+    .matches, .standings { display: flex; justify-content: center; margin-bottom: 30px; }
+    table { border-collapse: collapse; width: 60%; background: #fff; }
+    th, td { border: 1px solid #ccc; padding: 8px; text-align: center; }
+    th { background: #333; color: #fff; }
+  </style>
+</head>
+<body>
+
+  <h1>eFootball League</h1>
+
+  <div class="match-day" id="matches-of-day">
+    <h2>Matches of the Day</h2>
+    <ul id="today-matches"></ul>
+  </div>
+
+  <div class="matches">
+    <table id="all-matches">
+      <thead>
+        <tr>
+          <th>Match</th>
+          <th>Date</th>
+          <th>Result</th>
+        </tr>
+      </thead>
+      <tbody></tbody>
+    </table>
+  </div>
+
+  <div class="standings">
+    <table id="standings-table">
+      <thead>
+        <tr>
+          <th>Player</th>
+          <th>Wins</th>
+          <th>Losses</th>
+          <th>Points</th>
+        </tr>
+      </thead>
+      <tbody></tbody>
+    </table>
+  </div>
+
+  <script>
+    // Sample players
+    const players = ["F1","F2","F3","F4","F5","F6","F7","F8","F9","F10",
+                     "P1","P2","P3","P4","P5","P6","P7","P8","P9","P10"];
+
+    // Generate round-robin matches (simple)
+    const matches = [];
+    for(let i=0;i<players.length;i++){
+      for(let j=i+1;j<players.length;j++){
+        let date = new Date();
+        date.setDate(date.getDate() + Math.floor(Math.random()*3));
+        matches.push({
+          home: players[i],
+          away: players[j],
+          date: date.toISOString().split('T')[0],
+          result: ""
+        });
+      }
+    }
+
+    // Display all matches
+    const allMatchesTable = document.querySelector("#all-matches tbody");
+    matches.forEach(m => {
+      let tr = document.createElement("tr");
+      tr.innerHTML = `<td>${m.home} vs ${m.away}</td><td>${m.date}</td><td>${m.result}</td>`;
+      allMatchesTable.appendChild(tr);
+    });
+
+    // Display matches of today
+    const today = new Date().toISOString().split('T')[0];
+    const todayMatches = matches.filter(m => m.date === today);
+    const todayList = document.getElementById("today-matches");
+    todayMatches.forEach(m => {
+      let li = document.createElement("li");
+      li.textContent = `${m.home} vs ${m.away}`;
+      todayList.appendChild(li);
+    });
+
+    // Simple standings (random for prototype)
+    const standingsTable = document.querySelector("#standings-table tbody");
+    players.forEach(p => {
+      let wins = Math.floor(Math.random()*5);
+      let losses = Math.floor(Math.random()*5);
+      let points = wins*3;
+      let tr = document.createElement("tr");
+      tr.innerHTML = `<td>${p}</td><td>${wins}</td><td>${losses}</td><td>${points}</td>`;
+      standingsTable.appendChild(tr);
+    });
+  </script>
+
+</body>
+</html>
